@@ -9,5 +9,7 @@ import (
 func main() {
 	r := pkg.Router()
 	log.Println("🚀 Serveur démarré sur http://localhost:8080")
-	http.ListenAndServe(":8080", r)
+
+	// Bloque tant que le serveur tourne, et log l'erreur si jamais il plante
+	log.Fatal(http.ListenAndServe(":8080", r))
 }

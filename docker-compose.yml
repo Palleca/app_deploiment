@@ -2,7 +2,7 @@ version: "3.9"
 
 services:
   app1:
-    build: ./app_deploiment
+    build: .
     container_name: blockchain-app-1
     environment:
       - INSTANCE=app1
@@ -10,7 +10,7 @@ services:
       - "8080"
 
   app2:
-    build: ./app_deploiment
+    build: .
     container_name: blockchain-app-2
     environment:
       - INSTANCE=app2
@@ -23,7 +23,7 @@ services:
     environment:
       - BACKENDS=http://blockchain-app-1:8080,http://blockchain-app-2:8080
     ports:
-      - "8080:8443"
+      - "8080:80"   # proxy écoute sur 80 à l'intérieur, exposé sur 8080 à l'extérieur
     depends_on:
       - app1
       - app2

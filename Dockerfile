@@ -1,29 +1,21 @@
-# Étape 1 : build
+# Étape 1 : build et tests
 FROM golang:1.25 AS builder
-
-# Répertoire de travail dans le conteneur
 WORKDIR /app
 
-# Copier les fichiers go mod pour installer les dépendances
 COPY go.mod go.sum ./
 RUN go mod download
 
-# Copier tout le projet
 COPY . .
 
-# Compiler l’application
+# run tests avec couverture
+RUN go test ./... -coverprofile=coverage.out
+
+# build du binaire
 RUN go build -o app .
 
-# Étape 2 : image finale (exécution uniquement)
+# Étape 2 : image finale
 FROM debian:bookworm-slim
-
 WORKDIR /root/
-
-# Copier le binaire compilé depuis l’étape builder
 COPY --from=builder /app/app .
-
-# Exposer le port
 EXPOSE 8080
-
-# Lancer l’application
 CMD ["./app"]

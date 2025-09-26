@@ -7,65 +7,47 @@ on:
     branches: ["main"]
 
 jobs:
-  build-and-push:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout du code
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Installation de Go
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
           go-version: 1.25
 
-      # Lancer les tests avec couverture
       - name: Run tests
         run: |
           go test ./... -coverprofile=coverage.out
           go tool cover -func=coverage.out
 
-      # Sauvegarder rapport de couverture
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.out
 
-      # Debug : afficher si secrets bien injectés (⚠️ sans afficher le token)
-      - name: Debug secrets
-        run: |
-          echo "Docker username: ${{ secrets.DOCKERHUB_USERNAME }}"
-          if [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
-            echo "❌ DOCKERHUB_TOKEN est vide"
-            exit 1
-          else
-            echo "✅ DOCKERHUB_TOKEN est bien présent (non affiché pour sécurité)"
-          fi
-
-      # Connexion à Docker Hub
       - name: Log in to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Build et push de l’app
       - name: Build and push app image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_deploiment:latest
+          tags: palleca/app_deploiment:latest
 
-      # Build et push du proxy
       - name: Build and push proxy image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v5
         with:
           context: ./reverse_proxy
           file: ./reverse_proxy/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_deploiment-proxy:latest
+          tags: palleca/app_deploiment-proxy:latest

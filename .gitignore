@@ -1,0 +1,25 @@
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Go vendor
+/vendor/
+
+# Logs & coverage
+*.log
+*.out
+coverage.html
+
+# Docker
+*.tar
+*.bak
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp

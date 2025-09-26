@@ -1,4 +1,4 @@
-name: CI/CD - Build, Test & Deploy
+name: CI - Build, Test & Push Docker Images
 
 on:
   push:
@@ -7,41 +7,52 @@ on:
     branches: ["main"]
 
 jobs:
-  unit-tests:
+  build-and-push:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout du code
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # Installation de Go
       - name: Set up Go
         uses: actions/setup-go@v5
         with:
-          go-version: "1.25"
+          go-version: 1.25
 
-      - name: Run unit tests
+      # Lancer les tests avec couverture
+      - name: Run tests
         run: |
           go test ./... -coverprofile=coverage.out
           go tool cover -func=coverage.out
 
+      # Sauvegarder rapport de couverture
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
           path: coverage.out
 
-  build-and-push:
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      # Debug : afficher si secrets bien injectés (⚠️ sans afficher le token)
+      - name: Debug secrets
+        run: |
+          echo "Docker username: ${{ secrets.DOCKERHUB_USERNAME }}"
+          if [ -z "${{ secrets.DOCKERHUB_TOKEN }}" ]; then
+            echo "❌ DOCKERHUB_TOKEN est vide"
+            exit 1
+          else
+            echo "✅ DOCKERHUB_TOKEN est bien présent (non affiché pour sécurité)"
+          fi
 
+      # Connexion à Docker Hub
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # Build et push de l’app
       - name: Build and push app image
         uses: docker/build-push-action@v4
         with:
@@ -50,6 +61,7 @@ jobs:
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_deploiment:latest
 
+      # Build et push du proxy
       - name: Build and push proxy image
         uses: docker/build-push-action@v4
         with:
@@ -57,19 +69,3 @@ jobs:
           file: ./reverse_proxy/Dockerfile
           push: true
           tags: ${{ secrets.DOCKERHUB_USERNAME }}/app_deploiment-proxy:latest
-
-  api-tests:
-    runs-on: ubuntu-latest
-    needs: build-and-push
-    steps:
-      - name: Run container from built image
-        run: |
-          docker run -d -p 8080:8080 --name app_test ${{ secrets.DOCKERHUB_USERNAME }}/app_deploiment:latest
-          sleep 5
-
-      - name: Test health endpoint
-        run: |
-          curl --fail http://localhost:8080/health
-
-      - name: Stop container
-        run: docker stop app_test

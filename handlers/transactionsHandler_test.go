@@ -15,7 +15,7 @@ func TestGetTransactionsHandler_HTML(t *testing.T) {
 	core.ResetBlockchain()
 
 	req, _ := http.NewRequest("GET", "/transactions", nil)
-	req.Header.Set("Accept", "text/html") // 👈 on force le mode HTML
+	req.Header.Set("Accept", "text/html") //  on force le mode HTML
 	rr := httptest.NewRecorder()
 	router.ServeHTTP(rr, req)
 
@@ -32,9 +32,9 @@ func TestCreateTransactionHandler_FormValid(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	form := "sender=Alice&receiver=Bob&amount=12.5"
+	form := "sender=Bruno&receiver=TOTO&amount=8.0"
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(form))
-	req.Header.Set("Content-Type", "application/x-www-form-urlencoded") // 👈 on force le Form
+	req.Header.Set("Content-Type", "application/x-www-form-urlencoded") //  on force le Form
 
 	rr := httptest.NewRecorder()
 	router.ServeHTTP(rr, req)

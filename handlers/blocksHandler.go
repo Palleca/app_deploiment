@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"strings"
 )
 
 // GET /blocks → affiche la blockchain
 func GetBlocksHandler(w http.ResponseWriter, r *http.Request) {
 	// JSON si demandé
-	if r.Header.Get("Accept") == "application/json" {
+	if strings.Contains(r.Header.Get("Accept"), "application/json") {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(core.Blockchain)
 		return

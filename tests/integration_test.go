@@ -22,7 +22,7 @@ func TestFullIntegrationFlow(t *testing.T) {
 	}
 
 	// 2. Ajouter une transaction
-	tx := core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 10}
+	tx := core.Transaction{Sender: "Bruno", Receiver: "Toi", Amount: 10}
 	txJSON, _ := json.Marshal(tx)
 	reqTx, _ := http.NewRequest("POST", "/transactions", bytes.NewBuffer(txJSON))
 	reqTx.Header.Set("Content-Type", "application/json")
@@ -51,9 +51,9 @@ func TestFullIntegrationFlow(t *testing.T) {
 		t.Fatalf("Blocks: statut attendu 200, obtenu %d", rrBlocks.Code)
 	}
 
-	if !bytes.Contains(rrBlocks.Body.Bytes(), []byte("Alice")) ||
-		!bytes.Contains(rrBlocks.Body.Bytes(), []byte("Bob")) {
-		t.Error("Transaction Alice -> Bob non trouvée dans la blockchain")
+	if !bytes.Contains(rrBlocks.Body.Bytes(), []byte("Bruno")) ||
+		!bytes.Contains(rrBlocks.Body.Bytes(), []byte("Toi")) {
+		t.Error("Transaction Bruno -> Toi non trouvée dans la blockchain")
 	}
 
 	// 5. Reset à nouveau et vérifier qu'il ne reste plus que le bloc genesis
@@ -71,9 +71,9 @@ func TestFullIntegrationFlow(t *testing.T) {
 		t.Fatalf("Blocks: statut attendu 200, obtenu %d", rrBlocks2.Code)
 	}
 
-	// Le genesis block ne doit pas contenir "Alice" ou "Bob"
-	if bytes.Contains(rrBlocks2.Body.Bytes(), []byte("Alice")) ||
-		bytes.Contains(rrBlocks2.Body.Bytes(), []byte("Bob")) {
+	// Le genesis block ne doit pas contenir
+	if bytes.Contains(rrBlocks2.Body.Bytes(), []byte("Bruno")) ||
+		bytes.Contains(rrBlocks2.Body.Bytes(), []byte("Toi")) {
 		t.Error("La blockchain devrait avoir été réinitialisée au genesis uniquement")
 	}
 }

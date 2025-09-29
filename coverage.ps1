@@ -15,16 +15,22 @@ if (-Not (Test-Path $coverageDir)) {
 $coverageOut = Join-Path $coverageDir "coverage.out"
 $coverageHtml = Join-Path $coverageDir "coverage.html"
 
-Write-Host "➡️  Lancement des tests avec couverture (excluant main.go et logger.go)..."
+Write-Host "🚀 Lancement des tests avec couverture (packages core, handlers et pkg)..."
 
-# On limite le coverage aux packages core, handlers et pkg
+# Exécution des tests avec profil de couverture
 go test ./... -coverpkg=./core,./handlers,./pkg -coverprofile="$coverageOut"
 
-Write-Host "➡️  Génération du rapport HTML..."
+# Vérifier que le fichier coverage.out a bien été généré
+if (-Not (Test-Path $coverageOut)) {
+    Write-Host "❌ Erreur : le fichier coverage.out n'a pas été généré."
+    exit 1
+}
+
+Write-Host "📊 Génération du rapport HTML..."
 go tool cover -html="$coverageOut" -o "$coverageHtml"
 
-Write-Host "➡️  Résumé de la couverture :"
+Write-Host "📈 Résumé de la couverture :"
 go tool cover -func="$coverageOut"
 
-Write-Host "➡️  Ouverture du rapport HTML..."
+Write-Host "🌐 Ouverture du rapport HTML dans le navigateur..."
 Start-Process "$coverageHtml"

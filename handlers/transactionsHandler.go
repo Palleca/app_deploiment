@@ -6,12 +6,13 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"strings"
 )
 
 // GET /transactions → formulaire HTML OU JSON
 func GetTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 	// Mode JSON (tests, API)
-	if r.Header.Get("Accept") == "application/json" {
+	if strings.Contains(r.Header.Get("Accept"), "application/json") {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(core.Transactions)
 		return
@@ -83,7 +84,7 @@ func GetTransactionsHandler(w http.ResponseWriter, r *http.Request) {
 // POST /transactions → JSON ou Formulaire
 func CreateTransactionHandler(w http.ResponseWriter, r *http.Request) {
 	// Cas JSON (tests, API)
-	if r.Header.Get("Content-Type") == "application/json" {
+	if strings.Contains(r.Header.Get("Content-Type"), "application/json") {
 		var tx core.Transaction
 		if err := json.NewDecoder(r.Body).Decode(&tx); err != nil {
 			http.Error(w, "Payload JSON invalide", http.StatusBadRequest)

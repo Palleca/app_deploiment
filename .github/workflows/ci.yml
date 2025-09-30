@@ -81,6 +81,6 @@ jobs:
     steps:
       - name: Deploy step
         run: |
-          echo "🚀 Déploiement simulé terminé avec succès !"
+          echo " Déploiement simulé terminé avec succès !"
           echo "App: palleca/app_deploiment:latest"
           echo "Proxy: palleca/app_deploiment-proxy:latest"

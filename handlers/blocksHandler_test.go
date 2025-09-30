@@ -68,7 +68,7 @@ func TestGetBlocksHandler_HTML_WithTx(t *testing.T) {
 			Hash:         "hash2",
 			PreviousHash: "hash1",
 			Transactions: []core.Transaction{
-				{Sender: "Alice", Receiver: "Bob", Amount: 12.5},
+				{Sender: "Bruno", Receiver: "toto", Amount: 12.5},
 			},
 		},
 	}
@@ -82,7 +82,7 @@ func TestGetBlocksHandler_HTML_WithTx(t *testing.T) {
 		t.Fatalf("expected 200, got %d", w.Code)
 	}
 	// Vérifie que la transaction s'affiche dans le HTML
-	if !strings.Contains(w.Body.String(), "Alice") || !strings.Contains(w.Body.String(), "Bob") {
+	if !strings.Contains(w.Body.String(), "Bruno") || !strings.Contains(w.Body.String(), "toto") {
 		t.Fatalf("expected rendered transaction, got: %s", w.Body.String())
 	}
 }

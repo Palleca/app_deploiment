@@ -58,7 +58,7 @@ func TestBlocksHandler(t *testing.T) {
 func TestTransactionsHandler(t *testing.T) {
 	router := pkg.Router()
 
-	tx := core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 42}
+	tx := core.Transaction{Sender: "Bruno", Receiver: "toto", Amount: 42}
 	txJSON, _ := json.Marshal(tx)
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBuffer(txJSON))
 	req.Header.Set("Content-Type", "application/json")
@@ -75,7 +75,7 @@ func TestMineHandler(t *testing.T) {
 
 	// Ajoutons d'abord une transaction pour que le bloc miné ait du contenu
 	core.ResetBlockchain()
-	tx := core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 99}
+	tx := core.Transaction{Sender: "Bruno", Receiver: "toto", Amount: 99}
 	txJSON, _ := json.Marshal(tx)
 	reqTx, _ := http.NewRequest("POST", "/transactions", bytes.NewBuffer(txJSON))
 	reqTx.Header.Set("Content-Type", "application/json")

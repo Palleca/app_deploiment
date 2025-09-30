@@ -7,7 +7,7 @@ import (
 
 func TestAddTransaction(t *testing.T) {
 	core.ResetBlockchain()
-	tx := core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 10}
+	tx := core.Transaction{Sender: "Bruno", Receiver: "Toi", Amount: 10}
 	core.AddTransaction(tx)
 
 	if len(core.Transactions) != 1 {
@@ -17,7 +17,7 @@ func TestAddTransaction(t *testing.T) {
 
 func TestMineBlock(t *testing.T) {
 	core.ResetBlockchain()
-	tx := core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 10}
+	tx := core.Transaction{Sender: "Bruno", Receiver: "toi", Amount: 10}
 	core.AddTransaction(tx)
 
 	block := core.MineBlock()

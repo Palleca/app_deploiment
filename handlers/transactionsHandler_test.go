@@ -11,7 +11,7 @@ import (
 	"testing"
 )
 
-// ✅ GET /transactions en JSON avec une transaction
+// GET /transactions en JSON avec une transaction
 func TestGetTransactionsHandler_JSON(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -32,7 +32,7 @@ func TestGetTransactionsHandler_JSON(t *testing.T) {
 	}
 }
 
-// ✅ GET /transactions en JSON sans transaction
+// GET /transactions en JSON sans transaction
 func TestGetTransactionsHandler_JSON_NoTx(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain() // aucune transaction
@@ -56,7 +56,7 @@ func TestGetTransactionsHandler_JSON_NoTx(t *testing.T) {
 	}
 }
 
-// ✅ POST /transactions en JSON valide
+// POST /transactions en JSON valide
 func TestCreateTransactionHandler_JSON_Valid(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -76,7 +76,7 @@ func TestCreateTransactionHandler_JSON_Valid(t *testing.T) {
 	}
 }
 
-// ❌ POST /transactions JSON invalide (mauvais payload)
+// POST /transactions JSON invalide (mauvais payload)
 func TestCreateTransactionHandler_JSON_InvalidPayload(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -93,7 +93,7 @@ func TestCreateTransactionHandler_JSON_InvalidPayload(t *testing.T) {
 	}
 }
 
-// ❌ POST /transactions JSON malformé
+// POST /transactions JSON malformé
 func TestCreateTransactionHandler_JSON_Malformed(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -110,7 +110,7 @@ func TestCreateTransactionHandler_JSON_Malformed(t *testing.T) {
 	}
 }
 
-// ❌ MineBlockHandler sans transactions
+// MineBlockHandler sans transactions
 func TestMineBlockHandler_NoTransactions(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -124,7 +124,7 @@ func TestMineBlockHandler_NoTransactions(t *testing.T) {
 	}
 }
 
-// ✅ MineBlockHandler avec transactions
+// MineBlockHandler avec transactions
 func TestMineBlockHandler_WithTransactions(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -151,7 +151,7 @@ func TestMineBlockHandler_WithTransactions(t *testing.T) {
 	}
 }
 
-// ✅ GetTransactionsHandler (HTML avec transactions)
+// GetTransactionsHandler (HTML avec transactions)
 func TestGetTransactionsHandler_HTML_WithTx(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -170,7 +170,7 @@ func TestGetTransactionsHandler_HTML_WithTx(t *testing.T) {
 	}
 }
 
-// ❌ CreateTransactionHandler formulaire avec montant invalide
+// CreateTransactionHandler formulaire avec montant invalide
 func TestCreateTransactionHandler_FormInvalidAmount(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
@@ -209,7 +209,7 @@ func TestCreateTransactionHandler_FormValidFull(t *testing.T) {
 	}
 }
 
-// ✅ GetTransactionsHandler (HTML sans transactions)
+// GetTransactionsHandler (HTML sans transactions)
 func TestGetTransactionsHandler_HTML_NoTx(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain() // aucune transaction

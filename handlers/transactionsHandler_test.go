@@ -17,7 +17,7 @@ func TestGetTransactionsHandler_JSON(t *testing.T) {
 	core.ResetBlockchain()
 
 	// On ajoute une transaction pour tester le retour JSON
-	core.AddTransaction(core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 10})
+	core.AddTransaction(core.Transaction{Sender: "Bruno", Receiver: "toto", Amount: 10})
 
 	req, _ := http.NewRequest("GET", "/transactions", nil)
 	req.Header.Set("Accept", "application/json")
@@ -61,7 +61,7 @@ func TestCreateTransactionHandler_JSON_Valid(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	body := `{"sender":"Alice","receiver":"Bob","amount":42}`
+	body := `{"sender":"Bruno","receiver":"toto","amount":42}`
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -81,7 +81,7 @@ func TestCreateTransactionHandler_JSON_InvalidPayload(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	body := `{"sender": "","receiver":"Bob","amount":-5}`
+	body := `{"sender": "","receiver":"toto","amount":-5}`
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -98,7 +98,7 @@ func TestCreateTransactionHandler_JSON_Malformed(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	body := `{"sender": "Alice", "receiver": "Bob" "amount":42}` // virgule manquante
+	body := `{"sender": "Bruno", "receiver": "toto" "amount":42}` // virgule manquante
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(body))
 	req.Header.Set("Content-Type", "application/json")
 
@@ -130,7 +130,7 @@ func TestMineBlockHandler_WithTransactions(t *testing.T) {
 	core.ResetBlockchain()
 
 	// On ajoute une transaction pour pouvoir miner
-	core.AddTransaction(core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 50})
+	core.AddTransaction(core.Transaction{Sender: "Bruno", Receiver: "toto", Amount: 50})
 
 	req, _ := http.NewRequest("POST", "/mine", nil)
 	req.Header.Set("Accept", "application/json") // on force JSON
@@ -155,7 +155,7 @@ func TestMineBlockHandler_WithTransactions(t *testing.T) {
 func TestGetTransactionsHandler_HTML_WithTx(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
-	core.AddTransaction(core.Transaction{Sender: "Alice", Receiver: "Bob", Amount: 12})
+	core.AddTransaction(core.Transaction{Sender: "bruno", Receiver: "toto", Amount: 12})
 
 	req, _ := http.NewRequest("GET", "/transactions", nil)
 	req.Header.Set("Accept", "text/html")
@@ -165,7 +165,7 @@ func TestGetTransactionsHandler_HTML_WithTx(t *testing.T) {
 	if rr.Code != http.StatusOK {
 		t.Fatalf("GET /transactions (HTML avec tx) attendu 200, obtenu %d", rr.Code)
 	}
-	if !strings.Contains(rr.Body.String(), "Alice") {
+	if !strings.Contains(rr.Body.String(), "bruno") {
 		t.Errorf("Réponse HTML ne contient pas la transaction ajoutée: %s", rr.Body.String())
 	}
 }
@@ -175,7 +175,7 @@ func TestCreateTransactionHandler_FormInvalidAmount(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	form := "sender=Alice&receiver=Bob&amount=abc" // montant invalide
+	form := "sender=bruno&receiver=toto&amount=abc" // montant invalide
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(form))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
@@ -192,7 +192,7 @@ func TestCreateTransactionHandler_FormValidFull(t *testing.T) {
 	router := pkg.Router()
 	core.ResetBlockchain()
 
-	form := "sender=Alice&receiver=Bob&amount=25"
+	form := "sender=bruno&receiver=toto&amount=25"
 	req, _ := http.NewRequest("POST", "/transactions", bytes.NewBufferString(form))
 	req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 

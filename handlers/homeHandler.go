@@ -34,7 +34,7 @@ func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	</head>
 	<body>
 		<div class="container">
-			<h1> Mini Blockchain</h1>
+			<h1>🚀 Bienvenue sur ma Mini Blockchain</h1>
 			<p style="text-align:center;">Choisis une action :</p>
 			<ul>
 				<li><a href="/transactions">➕ Ajouter une transaction</a></li>
